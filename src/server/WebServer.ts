@@ -10,8 +10,8 @@ class WebServer {
     private _webServer;
 
     public readonly options = {
-        port:10086,
-        rootPath:'/'
+        port: 10086,
+        rootPath: '/'
     };
 
     constructor(options) {
@@ -21,10 +21,10 @@ class WebServer {
 
     private _webHandler(req, res) {
         let urlOpt = url.parse(req.url, true);
-        this._handlerStaticFile(urlOpt,req, res);
+        this._handlerStaticFile(urlOpt, req, res);
     }
 
-    private _handlerStaticFile(urlOpt,req, res) {
+    private _handlerStaticFile(urlOpt, req, res) {
         let resData = '';
         let header = util.getContentType(urlOpt.pathname);
         let filepath = require('path').resolve(this.options.rootPath + urlOpt.path.split('?')[0]);
@@ -34,12 +34,29 @@ class WebServer {
             resData = '文件不存在:' + filepath;
             res.end(resData);
         }
-        else{
+        else if (fs.statSync(filepath).isDirectory()) {
+            resData = this._renderDir(urlOpt, filepath);
+            res.writeHead(200, header);
+            res.end(resData);
+        }
+        else {
             res.writeHead(200, header);
             resData = fs.readFileSync(filepath);
             res.end(resData);
         }
-        console.log(filepath);
+    }
+
+    /**
+     * 列出目录
+     */
+    private _renderDir = function (urlOpt, dir) {
+        if (!fs.existsSync(dir)) return '';
+        var files = fs.readdirSync(dir), resData = '<h3>' + dir + '</h3>', href = '';
+        files.forEach(function (file) {
+            href = (urlOpt.href + '/' + file).replace(/((\:?)\/{1,})/g, function ($m, $1, $2) { return $2 ? $1 : '/'; });
+            resData += '<a href="' + href + '">' + file + '</a></br>';
+        });
+        return resData;
     }
 
     on() {
