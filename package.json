@@ -1,8 +1,9 @@
 {
   "name": "bifrost",
   "displayName": "Bifrost",
-  "description": "nothing",
-  "version": "0.0.2",
+  "description": "for front end developer",
+  "icon": "imgs/logo.png",
+  "version": "0.0.3",
   "publisher": "benqy",
   "engines": {
     "vscode": "^1.10.0"
