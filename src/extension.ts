@@ -10,10 +10,11 @@ export function activate(context: ExtensionContext) {
     server.on();
     
     commands.registerCommand('extension.bf.open_in_browser', (events) => {
-        let filepath = events.fsPath.replace(workspace.rootPath, '').replace(/\\/ig,'/');
-        console.log(ip);
-        let url = 'http:' + ip + (server.options.port == 80 ? '' : ':' + server.options.port) + filepath;
-        broswerOpener(url);
-        console.log(`open:${url}`);
+        console.log(events)
+        // let filepath = events.fsPath.replace(workspace.rootPath, '').replace(/\\/ig,'/');
+        // console.log(ip);
+        // let url = 'http:' + ip + (server.options.port == 80 ? '' : ':' + server.options.port) + filepath;
+        // broswerOpener(url);
+        // console.log(`open:${url}`);
     });
 }

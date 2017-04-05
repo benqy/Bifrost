@@ -24,7 +24,8 @@
       "explorer/context": [
         {
           "when": "explorerViewletVisible",
-          "command": "extension.bf.open_in_browser"
+          "command": "extension.bf.open_in_browser",
+          "group": "navigation@1"
         }
       ]
     },
@@ -32,6 +33,13 @@
       {
         "command": "extension.bf.open_in_browser",
         "title": "在浏览器打开"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "extension.bf.open_in_browser",
+        "key": "ctrl+alt+o",
+        "when": "explorerViewletVisible"
       }
     ]
   },
