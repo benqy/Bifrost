@@ -1,6 +1,6 @@
 import { window, workspace, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument } from 'vscode';
 import { Proxy,WebServer } from './server';
-let broswerOpener = require('open');
+import * as broswerOpener from 'open';
 let ip = require('ip').address();
 
 export function activate(context: ExtensionContext) {

@@ -1,8 +1,7 @@
-const http = require('http');
-const url = require('url');
-const path = require('path');
-const fs = require('fs');
-
+import * as http from 'http';
+import * as url  from 'url';
+import * as path from 'path';
+import * as fs from 'fs';
 import util from './util'
 
 
@@ -41,7 +40,7 @@ class WebServer {
         }
         else {
             res.writeHead(200, header);
-            resData = fs.readFileSync(filepath);
+            resData = fs.readFileSync(filepath).toString();
             res.end(resData);
         }
     }
@@ -49,11 +48,11 @@ class WebServer {
     /**
      * 列出目录
      */
-    private _renderDir = function (urlOpt, dir) {
+    private _renderDir(urlOpt, dir) {
         if (!fs.existsSync(dir)) return '';
         var files = fs.readdirSync(dir), resData = '<h3>' + dir + '</h3>', href = '';
-        files.forEach(function (file) {
-            href = (urlOpt.href + '/' + file).replace(/((\:?)\/{1,})/g, function ($m, $1, $2) { return $2 ? $1 : '/'; });
+        files.forEach((file) => {
+            href = (urlOpt.href + '/' + file).replace(/((\:?)\/{1,})/g, ($m, $1, $2) => { return $2 ? $1 : '/'; });
             resData += '<a href="' + href + '">' + file + '</a></br>';
         });
         return resData;
