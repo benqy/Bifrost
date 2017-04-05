@@ -15,12 +15,18 @@ todo:
 
 ## screenshots
 
+open file  
+![](https://raw.githubusercontent.com/benqy/Bifrost/master/imgs/openfile.png)
+
+open directory  
+![](https://raw.githubusercontent.com/benqy/Bifrost/master/imgs/opendirectory.png)
+
+setting  
+![](https://raw.githubusercontent.com/benqy/Bifrost/master/imgs/setting.png)
+
 ## Requirements
 
-
-
 ## Extension Settings
-
 
 This extension contributes the following settings:
 
