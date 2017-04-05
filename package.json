@@ -41,7 +41,18 @@
         "key": "shift+alt+o",
         "when": "explorerViewletVisible"
       }
-    ]
+    ],
+    "configuration": {
+        "type": "object",
+        "title": "bifrost config",
+        "properties": {
+            "bifrost.port": {
+                "type": "number",
+                "default": 80,
+                "description": "local webserver port"
+            }
+        }
+    }
   },
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
