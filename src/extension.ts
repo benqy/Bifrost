@@ -6,12 +6,15 @@ let ip = require('ip').address();
 export function activate(context: ExtensionContext) {
     console.log('Congratulations, your extension "Bifrost" is now active!');
 
+    
     let defaultOptions = workspace.getConfiguration('bifrost');
     var server = new WebServer({ port: defaultOptions.port,rootPath:workspace.rootPath });
     server.on();
     
     commands.registerCommand('extension.bf.open_in_browser', (events) => {
         let fsPath;
+        // window.showInputBox({prompt: 'What is your favorite fruit?'})
+        //     .then(val => window.showInformationMessage('Your input was ' + val));
         if(events.fsPath){
             fsPath = events.fsPath;
         }
