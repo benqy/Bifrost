@@ -25,7 +25,7 @@ class WebServer {
 
     private _handlerStaticFile(urlOpt, req, res) {
         let resData = '';
-        let header = util.getContentType(urlOpt.pathname);
+        let header = {'content-type':util.getContentType(urlOpt.pathname)};
         let filepath = require('path').resolve(this.options.rootPath + urlOpt.path.split('?')[0]);
         filepath = decodeURIComponent(filepath);
         if (!fs.existsSync(filepath)) {

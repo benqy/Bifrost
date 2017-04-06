@@ -7,32 +7,32 @@ export default {
         let dirReg = /(^.*)\/(.*\..*)$/,
             dirArr = dirReg.exec(pathname),
             filename,
-            header = {};
+            header = '';
         dirArr && (filename = dirArr[2]);
         if (!filename) {
-            header['content-type'] = 'text/html';
+            header = 'text/html';
         } else if (~filename.indexOf('.js')) {
-            header['content-type'] = 'application/x-javascript';
+            header= 'application/x-javascript';
         } else if (~filename.indexOf('.html') || ~filename.indexOf('.shtml') || ~filename.indexOf('.htm')) {
-            header['content-type'] = 'text/html';
+            header = 'text/html';
         } else if (~filename.indexOf('.css')) {
-            header['content-type'] = 'text/css';
+            header = 'text/css';
         } else if (~filename.indexOf('.xml')) {
-            header['content-type'] = 'application/xml';
+            header= 'application/xml';
         } else if (~filename.indexOf('.json')) {
-            header['content-type'] = 'application/json';
+            header = 'application/json';
         } else if (~filename.indexOf('.jpg')) {
-            header['content-type'] = 'image/jpeg';
+            header = 'image/jpeg';
         } else if (~filename.indexOf('.png')) {
-            header['content-type'] = 'image/png';
+            header = 'image/png';
         } else if (~filename.indexOf('.gif')) {
-            header['content-type'] = 'image/gif';
+            header = 'image/gif';
         } else if (~filename.indexOf('.bmp')) {
-            header['content-type'] = 'image/bmp';
+            header = 'image/bmp';
         } else if (~filename.indexOf('.ico')) {
-            header['content-type'] = 'image/x-icon';
+            header = 'image/x-icon';
         } else {
-            header['content-type'] = 'text/plain';
+            header = 'text/plain';
         }
         return header;
     }
