@@ -9,6 +9,9 @@ class Server {
     private _options;
     private _webServer: WebServer;
     private _proxyServer: ProxyServer;
+    private _statusBarItem: StatusBarItem;
+    private _proxyOffText = 'proxy server off';
+    private _proxyOnText:string;
 
     public readonly webServerPort: number;
     public readonly rootPath: string;
@@ -19,6 +22,10 @@ class Server {
         this.webServerPort = configs.webServerPort;
         this.proxyServerPort = configs.proxyServerPort;
         this.rootPath = workspace.rootPath;
+        this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
+        this._proxyOnText  = `proxy server on ${this.proxyServerPort}`;
+        this._statusBarItem.text = this._proxyOffText;
+        this._statusBarItem.show();
     }
 
     setProxy(port: number, fn?: Function) {
@@ -26,8 +33,14 @@ class Server {
         let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} http=127.0.0.1:${port}`;
         exec(commandStr, function (err) {
+            if(err){
+                this._statusBarItem.text = this._proxyOffText;
+            }
+            else{
+                this._statusBarItem.text = this._proxyOnText;
+            }
             fn && fn(err);
-        });
+        }.bind(this));
     }
 
     disProxy(fn?: Function) {
