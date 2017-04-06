@@ -26,8 +26,12 @@ class ProxyServer {
         const urlOpt = url.parse(req.url, true);
         console.log(req.url)
         if(proxyItem){
+            req.url = 'http://127.0.0.1?proxyurl=' + encodeURIComponent(proxyItem.url) + '&oriurl=' + encodeURIComponent(req.url);
             this._proxy.web(req,res,{
-                target: 'http://127.0.0.1'
+                target: {
+                    host:'127.0.0.1',
+                    port:80
+                }
             })
         }
         else{
@@ -43,10 +47,10 @@ class ProxyServer {
 
     on() {
         this._server.listen(this.options.port)
-        this._proxy.on('proxyReq', function(proxyReq, req, res, options) {
-            console.log(proxyReq);
-            //proxyReq.setHeader('Host','www.google.co.uk');
-        });
+        // this._proxy.on('proxyReq', function(proxyReq, req, res, options) {
+        //     console.log(proxyReq);
+        //     //proxyReq.setHeader('Host','www.google.co.uk');
+        // });
         console.log(`proxy on ${this.options.port}`);
     }
 

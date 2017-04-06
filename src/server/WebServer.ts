@@ -17,6 +17,7 @@ class WebServer {
 
     private _webHandler(req, res) {
         let urlOpt = url.parse(req.url, true);
+        console.log(req)
         this._handlerStaticFile(urlOpt, req, res);
     }
 
