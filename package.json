@@ -47,10 +47,15 @@
         "type": "object",
         "title": "bifrost config",
         "properties": {
-            "bifrost.port": {
+            "bifrost.webServerPort": {
                 "type": "number",
                 "default": 80,
                 "description": "local webserver port"
+            },
+            "bifrost.proxyPort": {
+                "type": "number",
+                "default": 17173,
+                "description": "proxy server port"
             }
         }
     }

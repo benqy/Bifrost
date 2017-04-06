@@ -1,14 +1,14 @@
 import { window, workspace, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument } from 'vscode';
-import { Proxy,WebServer } from './server';
-import * as broswerOpener from 'open';
-let ip = require('ip').address();
+import { Server } from './server';
+import * as openInBrowser from 'open';
+const ip = require('ip').address();
 
 export function activate(context: ExtensionContext) {
     console.log('Congratulations, your extension "Bifrost" is now active!');
 
     
-    let defaultOptions = workspace.getConfiguration('bifrost');
-    var server = new WebServer({ port: defaultOptions.port,rootPath:workspace.rootPath });
+    const defaultOptions = workspace.getConfiguration('bifrost');
+    var server = new Server();
     server.on();
     
     commands.registerCommand('extension.bf.open_in_browser', (events) => {
@@ -22,8 +22,8 @@ export function activate(context: ExtensionContext) {
             fsPath = window.activeTextEditor.document.fileName;
         }
         let filepath = fsPath.replace(workspace.rootPath, '').replace(/\\/ig,'/');
-        let url = 'http:' + ip + (server.options.port == 80 ? '' : ':' + server.options.port) + filepath;
-        broswerOpener(url);
+        let url = 'http:' + ip + (server.webServerPort == 80 ? '' : ':' + server.webServerPort) + filepath;
+        openInBrowser(url);
         console.log(`open:${url}`);
     });
 }
