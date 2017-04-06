@@ -14,20 +14,26 @@ class ProxyManager {
     }
 
     getByUrl(url: string) {
+        var proxyItems = this.getAll();
+        return proxyItems.find(n => n.url === url);
+    }
 
+    getByFilePath(filepath: string) {
+        var proxyItems = this.getAll();
+        return proxyItems.find(n => n.filepath === filepath);
     }
 
     save(proxyItem) {
         var proxyItems = this.getAll();
-        console.log('save: '+ JSON.stringify(proxyItems,(key,value)=>{
+        console.log('save: ' + JSON.stringify(proxyItems, (key, value) => {
             return value;
-        },2));
+        }, 4));
     }
 
-    getAll() {
-        var proxyItems = {};
+    getAll(): any {
+        var proxyItems = [];
         if (this._settingExists()) {
-            proxyItems = JSON.parse(fs.readFileSync(this._settingPath,'utf-8'))           
+            proxyItems = JSON.parse(fs.readFileSync(this._settingPath, 'utf-8'))
         }
         return proxyItems;
     }

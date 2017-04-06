@@ -6,22 +6,22 @@ const ip = require('ip').address();
 export function activate(context: ExtensionContext) {
     console.log('Congratulations, your extension "Bifrost" is now active!');
 
-    
+
     const defaultOptions = workspace.getConfiguration('bifrost');
     var server = new Server();
-    server.on(()=>{console.log(`server run on ${server.webServerPort}`)});
-    
-    commands.registerCommand('extension.bf.open_in_browser', (events) => {
+    server.on(() => { console.log(`server run on ${server.webServerPort}`) });
+
+    commands.registerCommand('extension.bf.open_in_browser', events => {
         let fsPath;
         // window.showInputBox({prompt: 'What is your favorite fruit?'})
         //     .then(val => window.showInformationMessage('Your input was ' + val));
-        if(events.fsPath){
+        if (events && events.fsPath) {
             fsPath = events.fsPath;
         }
-        else if(window.activeTextEditor){
+        else if (window.activeTextEditor) {
             fsPath = window.activeTextEditor.document.fileName;
         }
-        let filepath = fsPath.replace(workspace.rootPath, '').replace(/\\/ig,'/');
+        let filepath = fsPath.replace(workspace.rootPath, '').replace(/\\/ig, '/');
         let url = 'http:' + ip + (server.webServerPort == 80 ? '' : ':' + server.webServerPort) + filepath;
         openInBrowser(url);
         console.log(`open:${url}`);

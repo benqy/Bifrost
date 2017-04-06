@@ -6,7 +6,7 @@ import util from './util'
 
 
 class WebServer {
-    private _webServer;
+    private _server;
 
     public readonly options = {
         port: 10086,
@@ -15,7 +15,7 @@ class WebServer {
 
     constructor(options) {
         this.options = options;
-        this._webServer = http.createServer(this._webHandler.bind(this));
+        this._server = http.createServer(this._webHandler.bind(this));
     }
 
     private _webHandler(req, res) {
@@ -59,7 +59,7 @@ class WebServer {
     }
 
     on() {
-        this._webServer.listen(this.options.port);
+        this._server.listen(this.options.port);
         //console.log(`webserver on ${this.options.port}`);
     }
 
