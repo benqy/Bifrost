@@ -9,7 +9,7 @@ class WebServer {
     private _server;
 
     public readonly options = {
-        port: 10086,
+        port: 80,
         rootPath: '/'
     };
 

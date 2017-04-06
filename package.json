@@ -52,9 +52,9 @@
                 "default": 80,
                 "description": "local webserver port"
             },
-            "bifrost.proxyPort": {
+            "bifrost.proxyServerPort": {
                 "type": "number",
-                "default": 17173,
+                "default": 17174,
                 "description": "proxy server port"
             }
         }

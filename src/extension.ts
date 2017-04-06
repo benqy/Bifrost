@@ -6,10 +6,9 @@ const ip = require('ip').address();
 export function activate(context: ExtensionContext) {
     console.log('Congratulations, your extension "Bifrost" is now active!');
 
-
     const defaultOptions = workspace.getConfiguration('bifrost');
-    var server = new Server();
-    server.on(() => { console.log(`server run on ${server.webServerPort}`) });
+    var server = new Server({ extensionPath: context.extensionPath });
+    server.on(() => { console.log(`web server run on ${server.webServerPort}`) });
 
     commands.registerCommand('extension.bf.open_in_browser', events => {
         let fsPath;
