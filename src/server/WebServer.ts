@@ -1,17 +1,14 @@
 import * as http from 'http';
-import * as url  from 'url';
+import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
 import util from './util'
 
 
 class WebServer {
-    private _server;
+    private _server:http.Server;
 
-    public readonly options = {
-        port: 80,
-        rootPath: '/'
-    };
+    public readonly options;
 
     constructor(options) {
         this.options = options;
@@ -25,8 +22,8 @@ class WebServer {
 
     private _handlerStaticFile(urlOpt, req, res) {
         let resData = '';
-        let header = {'content-type':util.getContentType(urlOpt.pathname)};
-        let filepath = require('path').resolve(this.options.rootPath + urlOpt.path.split('?')[0]);
+        let header = { 'content-type': util.getContentType(urlOpt.pathname) };
+        let filepath = path.resolve(this.options.rootPath + urlOpt.path.split('?')[0]);
         filepath = decodeURIComponent(filepath);
         if (!fs.existsSync(filepath)) {
             res.writeHead(404, header);
@@ -51,7 +48,7 @@ class WebServer {
     private _renderDir(urlOpt, dir) {
         if (!fs.existsSync(dir)) return '';
         var files = fs.readdirSync(dir), resData = '<h3>' + dir + '</h3>', href = '';
-        files.forEach((file) => {
+        files.forEach(file => {
             href = (urlOpt.href + '/' + file).replace(/((\:?)\/{1,})/g, ($m, $1, $2) => { return $2 ? $1 : '/'; });
             resData += '<a href="' + href + '">' + file + '</a></br>';
         });
@@ -64,7 +61,7 @@ class WebServer {
     }
 
     off() {
-        console.log('')
+        console.log('off')
     }
 }
 

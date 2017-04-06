@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
+import * as url from 'url';
 import util from './util'
 
 class ProxyManager {
@@ -13,9 +14,16 @@ class ProxyManager {
         return fs.existsSync(this._settingPath);
     }
 
-    getByUrl(url: string) {
-        var proxyItems = this.getAll();
-        return proxyItems.find(n => n.url === url);
+    getByUrl(urlStr: string) {
+        const proxyItems = this.getAll();
+        const urlStrOpt = url.parse(urlStr.toLowerCase(),true);
+        return proxyItems.find(n => {
+            const proxyUrlOpt = url.parse(n.url.toLowerCase(),true);
+            // console.log(n.url,proxyUrlOpt);
+            // console.log(urlStr,urlStrOpt);
+            return urlStrOpt.host === proxyUrlOpt.host && urlStrOpt.port === proxyUrlOpt.port && urlStrOpt.pathname === proxyUrlOpt.pathname;
+            //n.url.toLowerCase() === urlStr.toLowerCase()
+        });
     }
 
     getByFilePath(filepath: string) {

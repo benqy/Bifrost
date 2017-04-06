@@ -10,9 +10,9 @@ class Server {
     private _webServer: WebServer;
     private _proxyServer: ProxyServer;
 
-    public readonly webServerPort:number;
-    public readonly rootPath:string;
-    public readonly proxyServerPort:number;
+    public readonly webServerPort: number;
+    public readonly rootPath: string;
+    public readonly proxyServerPort: number;
 
     constructor(options) {
         this._options = options;
@@ -21,34 +21,31 @@ class Server {
         this.rootPath = workspace.rootPath;
     }
 
-    setProxy(port:number,fn?:Function) {
+    setProxy(port: number, fn?: Function) {
         let exec = childProcess.exec;
-        let exePath = path.resolve(this._options.extensionPath,'proxysetting.exe');
+        let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} http=127.0.0.1:${port}`;
-        exec(commandStr,function(err){
+        exec(commandStr, function (err) {
             fn && fn(err);
         });
     }
 
-    disProxy(fn?:Function) {
+    disProxy(fn?: Function) {
         let exec = childProcess.exec;
-        let exePath = path.resolve(this._options.extensionPath,'proxysetting.exe');
+        let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} stop`;
-        exec(commandStr,function(err){
+        exec(commandStr, function (err) {
             fn && fn(err)
         });
     }
 
-    on(fn?:Function) {
+    on(fn?: Function) {
         this._webServer = new WebServer({ port: this.webServerPort, rootPath: this.rootPath });
         this._webServer.on();
-        this._proxyServer = new ProxyServer({ 
-            port: this.proxyServerPort, 
-            rootPath: this.rootPath
-        })
+        this._proxyServer = new ProxyServer({ port: this.proxyServerPort, rootPath: this.rootPath })
         this._proxyServer.on();
-        this.setProxy(this.proxyServerPort,err =>{
-            if(!err){
+        this.setProxy(this.proxyServerPort, err => {
+            if (!err) {
                 console.log(`set global proxy on ${this.proxyServerPort}`)
             }
         });
