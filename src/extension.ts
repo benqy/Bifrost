@@ -25,4 +25,14 @@ export function activate(context: ExtensionContext) {
         openInBrowser(url);
         console.log(`open:${url}`);
     });
+
+    commands.registerCommand('extension.bf.enable_global_proxy', events => {
+        console.log('setproxy')
+        server.enableGlobalProxy(server.proxyServerPort);
+    });
+
+    commands.registerCommand('extension.bf.disable_global_proxy', events => {
+        console.log('proxy off')
+        server.disableGlobalProxy();
+    });
 }
