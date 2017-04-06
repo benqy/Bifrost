@@ -60,7 +60,7 @@ class WebServer {
 
     on() {
         this._webServer.listen(this.options.port);
-        console.log(`webserver on ${this.options.port}`);
+        //console.log(`webserver on ${this.options.port}`);
     }
 
     off() {

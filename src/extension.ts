@@ -9,7 +9,7 @@ export function activate(context: ExtensionContext) {
     
     const defaultOptions = workspace.getConfiguration('bifrost');
     var server = new Server();
-    server.on();
+    server.on(()=>{console.log(`server run on ${server.webServerPort}`)});
     
     commands.registerCommand('extension.bf.open_in_browser', (events) => {
         let fsPath;

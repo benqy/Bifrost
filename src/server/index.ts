@@ -1,11 +1,11 @@
-import { Proxy } from './Proxy';
+import { ProxyServer } from './ProxyServer';
 import { WebServer } from './WebServer';
 import { window, workspace, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument } from 'vscode';
 const defaultOptions = workspace.getConfiguration('bifrost');
 
 class Server {
     private _webServer: WebServer;
-    private _proxy: Proxy;
+    private _proxyServer: ProxyServer;
 
     public readonly webServerPort:number;
     public readonly rootPath:string;
@@ -15,9 +15,10 @@ class Server {
         this.rootPath = workspace.rootPath;
     }
 
-    on(fn?) {
+    on(fn?:Function) {
         this._webServer = new WebServer({ port: this.webServerPort, rootPath: this.rootPath });
         this._webServer.on();
+        fn();
     }
 }
 
