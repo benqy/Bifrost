@@ -10,7 +10,7 @@ class Server {
     private _webServer: WebServer;
     private _proxyServer: ProxyServer;
     private _statusBarItem: StatusBarItem;
-    private _disableGlobalProxyText = 'global proxy off';
+    private _disableGlobalProxyText = `system global proxy off`;
     private _enableGlobalProxyText: string;
 
     public readonly webServerPort: number;
@@ -23,8 +23,9 @@ class Server {
         this.proxyServerPort = configs.proxyServerPort;
         this.rootPath = workspace.rootPath;
         this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
-        this._enableGlobalProxyText = `global proxy to ${this.proxyServerPort}`;
-        this._statusBarItem.text = this._disableGlobalProxyText;
+        this._enableGlobalProxyText = `system global proxy to ${this.proxyServerPort}`;
+        this._statusBarItem.text = `$(globe) OFF`;
+        this._statusBarItem.tooltip = this._disableGlobalProxyText;
         this._statusBarItem.show();
     }
 
@@ -33,7 +34,10 @@ class Server {
         let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} http=127.0.0.1:${port}`;
         exec(commandStr, function (err) {
-            if (!err) this._statusBarItem.text = this._enableGlobalProxyText;
+            if (!err) {
+                this._statusBarItem.text = `$(globe) ON`;
+                this._statusBarItem.tooltip = this._enableGlobalProxyText;
+            }
             fn && fn(err);
         }.bind(this));
     }
@@ -43,7 +47,10 @@ class Server {
         let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} stop`;
         exec(commandStr, function (err) {
-            if (!err) this._statusBarItem.text = this._disableGlobalProxyText;
+            if (!err) {
+                this._statusBarItem.text = `$(globe) OFF`;
+                this._statusBarItem.tooltip = this._disableGlobalProxyText;
+            }
             fn && fn(err)
         }.bind(this));
     }
