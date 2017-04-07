@@ -1,9 +1,9 @@
 {
   "name": "bifrost",
   "displayName": "Bifrost",
-  "description": "for front end developer",
+  "description": "proxy,mock,local file web server",
   "icon": "imgs/logo.png",
-  "version": "0.0.3",
+  "version": "0.0.10",
   "publisher": "benqy",
   "engines": {
     "vscode": "^1.10.0"
