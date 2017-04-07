@@ -22,15 +22,15 @@ class ProxyServer {
     }
 
     private _webHandler(req, res) {
-        const proxyItem = this._proxyManager.getByUrl(req.url);
+        let {proxyItem,index} = this._proxyManager.getByUrl(req.url);
         const urlOpt = url.parse(req.url, true);
         console.log(req.url)
         if (proxyItem) {
-            req.url = 'http://127.0.0.1?proxyurl=' + encodeURIComponent(proxyItem.url) + '&oriurl=' + encodeURIComponent(req.url);
+            req.url = `http://127.0.0.1${this.options.webServerport}?isProxyRequest=true&proxyItemIndex=${index}&oriurl=${encodeURIComponent(req.url)}`;
             this._proxy.web(req, res, {
                 target: {
                     host: '127.0.0.1',
-                    port: 80
+                    port: this.options.webServerport
                 }
             }, err => {
                 console.log('err')

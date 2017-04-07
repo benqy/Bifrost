@@ -66,7 +66,7 @@ class Server {
     on(fn?: Function) {
         this._webServer = new WebServer({ port: this.webServerPort, rootPath: this.rootPath });
         this._webServer.on();
-        this._proxyServer = new ProxyServer({ port: this.proxyServerPort, rootPath: this.rootPath })
+        this._proxyServer = new ProxyServer({ port: this.proxyServerPort,webServerport: this.webServerPort, rootPath: this.rootPath })
         this._proxyServer.on();
         fn && fn();
     }

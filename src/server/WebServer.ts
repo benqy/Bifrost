@@ -3,44 +3,74 @@ import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
 import util from './util'
-
+import { ProxyManager,ProxyItem } from './ProxyManager';
 
 class WebServer {
     private _server:http.Server;
-
+    private _proxyManager: ProxyManager;
     public readonly options;
 
     constructor(options) {
         this.options = options;
+        this._proxyManager = new ProxyManager(this.options.rootPath);
         this._server = http.createServer(this._webHandler.bind(this));
+    }
+
+    private _readFile(filepath){
+        return fs.readFileSync(filepath);
+    }
+
+    private _404(filepath){
+        return `文件不存在 : ${filepath}`;
     }
 
     private _webHandler(req, res) {
         let urlOpt = url.parse(req.url, true);
-        console.log(req)
-        this._handlerStaticFile(urlOpt, req, res);
+        console.log(urlOpt)
+        if(urlOpt.query.isProxyRequest){
+            let proxyItem = this._proxyManager.getByIndex(urlOpt.query.proxyItemIndex*1);
+            console.log(proxyItem);
+            this._proxyHandler(urlOpt,req,res,proxyItem);
+        }
+        else{
+            this._staticFileHandler(urlOpt, req, res);
+        }
     }
 
-    private _handlerStaticFile(urlOpt, req, res) {
-        let resData = '';
+    private _proxyHandler(urlOpt,req,res,proxyItem:ProxyItem){
+        console.log('_proxyHandler')
+        let resData;        
+        let header = {'content-type': util.getContentType(url.parse(urlOpt.query.oriurl, true).pathname)};
+        console.log(header);
+        if(fs.existsSync(proxyItem.filepath)){
+            resData = this._readFile(proxyItem.filepath);
+            res.writeHead(200, header);
+        }
+        else{
+            resData = this._404(proxyItem.filepath);
+            res.writeHead(404, header);
+        }
+        res.end(resData);
+    }
+
+    private _staticFileHandler(urlOpt, req, res) {
+        let resData;
         let header = { 'content-type': util.getContentType(urlOpt.pathname) };
         let filepath = path.resolve(this.options.rootPath + urlOpt.path.split('?')[0]);
         filepath = decodeURIComponent(filepath);
         if (!fs.existsSync(filepath)) {
             res.writeHead(404, header);
-            resData = '文件不存在:' + filepath;
-            res.end(resData);
+            resData = this._404(filepath);
         }
         else if (fs.statSync(filepath).isDirectory()) {
             resData = this._renderDir(urlOpt, filepath);
             res.writeHead(200, header);
-            res.end(resData);
         }
         else {
             res.writeHead(200, header);
-            resData = fs.readFileSync(filepath).toString();
-            res.end(resData);
+            resData = this._readFile(filepath);
         }
+        res.end(resData);
     }
 
     /**
