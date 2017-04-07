@@ -39,11 +39,23 @@ class WebServer {
 
     private _proxyHandler(urlOpt,req,res,proxyItem:ProxyItem){
         console.log('_proxyHandler')
-        let resData;        
-        let header = {'content-type': util.getContentType(url.parse(urlOpt.query.oriurl, true).pathname)};
+        let resData;
+        let oriUrlOpt = url.parse(urlOpt.query.oriurl, true);
+        let header = {'content-type': util.getContentType(oriUrlOpt.pathname)};
         console.log(header);
         if(fs.existsSync(proxyItem.filepath)){
-            resData = this._readFile(proxyItem.filepath);
+            let fileText = this._readFile(proxyItem.filepath); 
+            if(proxyItem.runWithNode){
+                try {
+                    let customFn = new Function('query', fileText.toString());
+                    resData = customFn(oriUrlOpt.query).toString();
+                } catch (e) {
+                    resData = JSON.stringify(e.message);
+                }
+            }
+            else{
+                resData = fileText;
+            }
             res.writeHead(200, header);
         }
         else{

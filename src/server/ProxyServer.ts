@@ -25,7 +25,7 @@ class ProxyServer {
         let {proxyItem,index} = this._proxyManager.getByUrl(req.url);
         const urlOpt = url.parse(req.url, true);
         console.log(req.url)
-        if (proxyItem) {
+        if (proxyItem && !proxyItem.disable) {
             req.url = `http://127.0.0.1${this.options.webServerport}?isProxyRequest=true&proxyItemIndex=${index}&oriurl=${encodeURIComponent(req.url)}`;
             this._proxy.web(req, res, {
                 target: {

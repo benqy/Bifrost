@@ -4,9 +4,22 @@ import * as url from 'url';
 import util from './util'
 
 interface ProxyItem {
+    /**
+     * 要代理的线上地址
+     */
     url
+    /**
+     * 本地文件
+     */
     filepath
+    /**
+     * 禁用
+     */
     disable
+    /**
+     * 将本地文件内容作为function(query){}的方法内容在node环境下运行,并返回结果.
+     * 一般用于模拟动态接口
+     */
     runWithNode
 }
 
@@ -67,5 +80,7 @@ class ProxyManager {
         return proxyItems;
     }
 }
+
+
 
 export { ProxyManager, ProxyItem }
