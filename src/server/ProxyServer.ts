@@ -24,28 +24,25 @@ class ProxyServer {
     private _webHandler(req, res) {
         let {proxyItem,index} = this._proxyManager.getByUrl(req.url);
         const urlOpt = url.parse(req.url, true);
-        console.log(req.url)
         if (proxyItem && !proxyItem.disable) {
+            console.log(proxyItem)
             req.url = `http://127.0.0.1${this.options.webServerport}?isProxyRequest=true&proxyItemIndex=${index}&oriurl=${encodeURIComponent(req.url)}`;
             this._proxy.web(req, res, {
                 target: {
                     host: '127.0.0.1',
                     port: this.options.webServerport
                 }
-            }, err => {
-                console.log('err')
-            })
+            }, err => console.log('err'))
         }
         else {
+            console.log(urlOpt,urlOpt.port || 80)
             this._proxy.web(req, res, {
                 target: {
-                    host: urlOpt.host,
+                    host: urlOpt.hostname,
                     port: urlOpt.port || 80
                 },
                 secure: false
-            }, err => {
-                console.log('err reve')
-            });
+            }, err => console.log('err reve'));
         }
     }
 

@@ -48,9 +48,16 @@ class ProxyManager {
             const proxyUrlOpt = url.parse(n.url.toLowerCase(), true);
             // console.log(n.url,proxyUrlOpt);
             // console.log(urlStr,urlStrOpt);
-            if (urlStrOpt.host === proxyUrlOpt.host && urlStrOpt.port === proxyUrlOpt.port && urlStrOpt.pathname === proxyUrlOpt.pathname) {
-                index = i;
-                return true;
+            if (urlStrOpt.host === proxyUrlOpt.host
+                && urlStrOpt.port === proxyUrlOpt.port) {
+                if (urlStrOpt.pathname === proxyUrlOpt.pathname) {
+                    index = i;
+                    return true;
+                }
+                else if (util.isdir(n.filepath) && ~urlStrOpt.pathname.trim().indexOf(proxyUrlOpt.pathname.trim())) {
+                    index = i;
+                    return true;
+                }
             };
             //n.url.toLowerCase() === urlStr.toLowerCase()
         })

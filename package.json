@@ -53,7 +53,7 @@
         "properties": {
             "bifrost.webServerPort": {
                 "type": "number",
-                "default": 80,
+                "default": 10086,
                 "description": "local webserver port"
             },
             "bifrost.proxyServerPort": {
