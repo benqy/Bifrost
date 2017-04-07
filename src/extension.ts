@@ -9,6 +9,7 @@ export function activate(context: ExtensionContext) {
     const defaultOptions = workspace.getConfiguration('bifrost');
     var server = new Server({ extensionPath: context.extensionPath });
     server.on(() => { console.log(`web server run on ${server.webServerPort}`) });
+    //server.enableGlobalProxy();
 
     commands.registerCommand('extension.bf.open_in_browser', events => {
         let fsPath;
@@ -26,13 +27,8 @@ export function activate(context: ExtensionContext) {
         console.log(`open:${url}`);
     });
 
-    commands.registerCommand('extension.bf.enable_global_proxy', events => {
-        console.log('setproxy')
-        server.enableGlobalProxy(server.proxyServerPort);
-    });
-
-    commands.registerCommand('extension.bf.disable_global_proxy', events => {
-        console.log('proxy off')
-        server.disableGlobalProxy();
+    commands.registerCommand('extension.bf.toggle_global_proxy', events => {
+        console.log('toggle proxy')
+        server.toggleGlobalProxy();
     });
 }

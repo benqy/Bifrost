@@ -36,12 +36,8 @@
         "title": "在浏览器打开"
       },
       {
-        "command": "extension.bf.enable_global_proxy",
-        "title": "enable global proxy"
-      },
-      {
-        "command": "extension.bf.disable_global_proxy",
-        "title": "disable global proxy"
+        "command": "extension.bf.toggle_global_proxy",
+        "title": "toggle global proxy setting"
       }
     ],
     "keybindings": [

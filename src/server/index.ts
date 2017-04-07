@@ -10,8 +10,7 @@ class Server {
     private _webServer: WebServer;
     private _proxyServer: ProxyServer;
     private _statusBarItem: StatusBarItem;
-    private _disableGlobalProxyText = `system global proxy off`;
-    private _enableGlobalProxyText: string;
+    private _globalProxyOn = false;
 
     public readonly webServerPort: number;
     public readonly rootPath: string;
@@ -22,37 +21,46 @@ class Server {
         this.webServerPort = configs.webServerPort;
         this.proxyServerPort = configs.proxyServerPort;
         this.rootPath = workspace.rootPath;
+        this._initStatusBar();
+    }
+
+    private _initStatusBar() {
         this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left);
-        this._enableGlobalProxyText = `system global proxy to ${this.proxyServerPort}`;
-        this._statusBarItem.text = `$(globe) OFF`;
-        this._statusBarItem.tooltip = this._disableGlobalProxyText;
+        this._statusBarItem.command = 'extension.bf.toggle_global_proxy';
+        this._displayOffStatus();
         this._statusBarItem.show();
     }
 
-    enableGlobalProxy(port: number, fn?: Function) {
-        let exec = childProcess.exec;
-        let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
-        let commandStr = `${exePath} http=127.0.0.1:${port}`;
-        exec(commandStr, function (err) {
-            if (!err) {
-                this._statusBarItem.text = `$(globe) ON`;
-                this._statusBarItem.tooltip = this._enableGlobalProxyText;
-            }
-            fn && fn(err);
-        }.bind(this));
+    private _displayOnStatus() {
+        this._globalProxyOn = true;
+        this._statusBarItem.text = `$(globe) ON`;
+        this._statusBarItem.color = '#00ff00';
+        this._statusBarItem.tooltip = `system global proxy to ${this.proxyServerPort}`;
     }
 
-    disableGlobalProxy(fn?: Function) {
+    private _displayOffStatus() {
+        this._globalProxyOn = false;
+        this._statusBarItem.text = `$(globe) OFF`;
+        this._statusBarItem.color = '#ccc';
+        this._statusBarItem.tooltip = 'system global proxy off';
+    }
+
+    toggleGlobalProxy() {
+        this._globalProxyOn ? this.disableGlobalProxy() : this.enableGlobalProxy();
+    }
+
+    enableGlobalProxy() {
+        let exec = childProcess.exec;
+        let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
+        let commandStr = `${exePath} http=127.0.0.1:${this.proxyServerPort}`;
+        exec(commandStr, err => !err && this._displayOnStatus());
+    }
+
+    disableGlobalProxy() {
         let exec = childProcess.exec;
         let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} stop`;
-        exec(commandStr, function (err) {
-            if (!err) {
-                this._statusBarItem.text = `$(globe) OFF`;
-                this._statusBarItem.tooltip = this._disableGlobalProxyText;
-            }
-            fn && fn(err)
-        }.bind(this));
+        exec(commandStr, err => !err && this._displayOffStatus());
     }
 
     on(fn?: Function) {
