@@ -25,22 +25,26 @@ class ProxyServer {
         const proxyItem = this._proxyManager.getByUrl(req.url);
         const urlOpt = url.parse(req.url, true);
         console.log(req.url)
-        if(proxyItem){
+        if (proxyItem) {
             req.url = 'http://127.0.0.1?proxyurl=' + encodeURIComponent(proxyItem.url) + '&oriurl=' + encodeURIComponent(req.url);
-            this._proxy.web(req,res,{
-                target: {
-                    host:'127.0.0.1',
-                    port:80
-                }
-            })
-        }
-        else{
             this._proxy.web(req, res, {
                 target: {
-                    host:urlOpt.host,
-                    port:urlOpt.port || 80
+                    host: '127.0.0.1',
+                    port: 80
+                }
+            }, err => {
+                console.log('err')
+            })
+        }
+        else {
+            this._proxy.web(req, res, {
+                target: {
+                    host: urlOpt.host,
+                    port: urlOpt.port || 80
                 },
                 secure: false
+            }, err => {
+                console.log('err reve')
             });
         }
     }
@@ -50,6 +54,13 @@ class ProxyServer {
         // this._proxy.on('proxyReq', function(proxyReq, req, res, options) {
         //     console.log(proxyReq);
         //     //proxyReq.setHeader('Host','www.google.co.uk');
+        // });
+        // this._server.on('error', function (err, req, res) {
+        //     res.writeHead(500, {
+        //         'Content-Type': 'text/plain'
+        //     });
+
+        //     res.end('Something went wrong. And we are reporting a custom error message.');
         // });
         console.log(`proxy on ${this.options.port}`);
     }
