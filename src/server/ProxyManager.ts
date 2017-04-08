@@ -67,22 +67,33 @@ class ProxyManager {
         };
     }
 
+
+
     getByFilePath(filepath: string) {
         var proxyItems = this.getAll();
         return proxyItems.find(n => n.filepath === filepath);
     }
 
-    save(proxyItem) {
-        var proxyItems = this.getAll();
-        console.log('save: ' + JSON.stringify(proxyItems, (key, value) => {
+    save(proxyItems) {
+        let jsonStr = JSON.stringify(proxyItems, (key, value) => {
             return value;
-        }, 4));
+        }, 4);
+        fs.writeFileSync(this._settingPath,jsonStr);
     }
 
     getAll(): Array<ProxyItem> {
-        var proxyItems = [];
+        let proxyItems = [];
         if (this._settingExists()) {
             proxyItems = JSON.parse(fs.readFileSync(this._settingPath, 'utf-8'))
+        }
+        else {
+            proxyItems = [{
+                url: 'http://www.proxyitems.com',
+                filepath: this._settingPath,
+                disable: false,
+                runWithNode: false
+            }];
+            this.save(proxyItems);
         }
         return proxyItems;
     }
