@@ -43,8 +43,7 @@
     "keybindings": [
       {
         "command": "extension.bf.open_in_browser",
-        "key": "shift+alt+o",
-        "when": "explorerViewletVisible"
+        "key": "shift+alt+o"
       }
     ],
     "configuration": {

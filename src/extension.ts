@@ -10,7 +10,7 @@ export function activate(context: ExtensionContext) {
     var server = new Server({ extensionPath: context.extensionPath });
     server.on(() => { console.log(`web server run on ${server.webServerPort}`) });
     //server.enableGlobalProxy();
-
+    
     commands.registerCommand('extension.bf.open_in_browser', events => {
         let fsPath;
         // window.showInputBox({prompt: 'What is your favorite fruit?'})
