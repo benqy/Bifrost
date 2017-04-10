@@ -6,7 +6,6 @@ import { window, workspace, commands, Disposable, ExtensionContext, StatusBarAli
 const configs = workspace.getConfiguration('bifrost');
 
 class Server {
-    private _options;
     private _webServer: WebServer;
     private _proxyServer: ProxyServer;
     private _statusBarItem: StatusBarItem;
@@ -16,8 +15,7 @@ class Server {
     public readonly rootPath: string;
     public readonly proxyServerPort: number;
 
-    constructor(options) {
-        this._options = options;
+    constructor(readonly options) {
         this.webServerPort = configs.webServerPort;
         this.proxyServerPort = configs.proxyServerPort;
         this.rootPath = workspace.rootPath;
@@ -51,14 +49,14 @@ class Server {
 
     enableGlobalProxy() {
         let exec = childProcess.exec;
-        let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
+        let exePath = path.resolve(this.options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} http=127.0.0.1:${this.proxyServerPort}`;
         exec(commandStr, err => !err && this._displayOnStatus());
     }
 
     disableGlobalProxy() {
         let exec = childProcess.exec;
-        let exePath = path.resolve(this._options.extensionPath, 'proxysetting.exe');
+        let exePath = path.resolve(this.options.extensionPath, 'proxysetting.exe');
         let commandStr = `${exePath} stop`;
         exec(commandStr, err => !err && this._displayOffStatus());
     }

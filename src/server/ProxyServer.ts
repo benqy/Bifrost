@@ -12,10 +12,8 @@ class ProxyServer {
     private _proxy;
     private _server: http.Server;
 
-    public readonly options;
 
-    constructor(options) {
-        this.options = options;
+    constructor(readonly options) {
         this._proxyManager = new ProxyManager(this.options.rootPath);
         this._proxy = httpProxy.createProxyServer();
         this._server = http.createServer(this._webHandler.bind(this));

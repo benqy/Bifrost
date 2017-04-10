@@ -8,10 +8,8 @@ import { ProxyManager, ProxyItem } from './ProxyManager';
 class WebServer {
     private _server: http.Server;
     private _proxyManager: ProxyManager;
-    public readonly options;
 
-    constructor(options) {
-        this.options = options;
+    constructor(readonly options) {
         this._proxyManager = new ProxyManager(this.options.rootPath);
         this._server = http.createServer(this._webHandler.bind(this));
     }
@@ -26,7 +24,7 @@ class WebServer {
 
     private _webHandler(req, res) {
         let urlOpt = url.parse(req.url, true);
-        console.log(urlOpt)
+        //console.log(urlOpt)
         if (urlOpt.query.isProxyRequest) {
             let proxyItem = this._proxyManager.getByIndex(urlOpt.query.proxyItemIndex * 1);
             console.log(proxyItem);

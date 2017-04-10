@@ -25,10 +25,9 @@ interface ProxyItem {
 
 
 class ProxyManager {
-    private _settingPath: string;
 
-    constructor(rootpath: string) {
-        this._settingPath = rootpath + '\\bifrost.json';
+    constructor(readonly _settingPath: string) {
+        this._settingPath += '\\bifrost.json';
     }
 
     private _settingExists() {
