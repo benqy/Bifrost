@@ -28,13 +28,24 @@ class ProxyManager {
 
     //单例
     static _current: ProxyManager;
+    get proxyItems(): Array<ProxyItem> {
+        return this._proxyItems;
+    }
+
+    private _proxyItems: Array<ProxyItem> = [];
 
     constructor(private _settingPath: string) {
         this._settingPath += '\\bifrost.json';
         if (ProxyManager._current) {
             return ProxyManager._current;
         }
-        else{
+        else {
+            console.log('static init Proxy Manager')
+            fs.watch(this._settingPath, (eventType, filename) => {
+                console.log('update bifrost.json');
+                this._readProxyItemsFile();
+            });
+            this._readProxyItemsFile();
             ProxyManager._current = this;
         }
     }
@@ -44,24 +55,21 @@ class ProxyManager {
     }
 
     getByIndex(index: number) {
-        const proxyItems = this.getAll();
-        return proxyItems[index];
+        return this.proxyItems[index];
     }
 
     getByUrl(urlStr: string) {
-        const proxyItems = this.getAll();
         const urlStrOpt = url.parse(urlStr.toLowerCase(), true);
         let index;
-        let proxyItem = proxyItems.find((n, i) => {
+        let proxyItem = this.proxyItems.find((n, i) => {
             const proxyUrlOpt = url.parse(n.url.toLowerCase(), true);
-            // console.log(n.url,proxyUrlOpt);
-            // console.log(urlStr,urlStrOpt);
             if (urlStrOpt.host === proxyUrlOpt.host
                 && urlStrOpt.port === proxyUrlOpt.port) {
                 if (urlStrOpt.pathname === proxyUrlOpt.pathname) {
                     index = i;
                     return true;
                 }
+                //设置了整个目录代理(n.filepath),请求的文件在这个目录中,则该文件也被代理到对应的相对路径.
                 else if (util.isdir(n.filepath) && ~urlStrOpt.pathname.trim().indexOf(proxyUrlOpt.pathname.trim())) {
                     index = i;
                     return true;
@@ -78,8 +86,7 @@ class ProxyManager {
 
 
     getByFilePath(filepath: string) {
-        var proxyItems = this.getAll();
-        return proxyItems.find(n => n.filepath === filepath);
+        return this.proxyItems.find(n => n.filepath === filepath);
     }
 
     save(proxyItems) {
@@ -89,22 +96,24 @@ class ProxyManager {
         fs.writeFileSync(this._settingPath, jsonStr);
     }
 
-    getAll(): Array<ProxyItem> {
-        let proxyItems = [];
+    private _readProxyItemsFile() {
         if (this._settingExists()) {
-            proxyItems = JSON.parse(fs.readFileSync(this._settingPath, 'utf-8'))
+            let fileContent = fs.readFileSync(this._settingPath, 'utf-8');
+            this._proxyItems = fileContent ? JSON.parse(fs.readFileSync(this._settingPath, 'utf-8')) : [];
         }
         else {
-            proxyItems = [{
+            console.log('create bifrost.json');
+            this._proxyItems = [{
                 url: 'http://www.proxyitems.com',
                 filepath: this._settingPath,
                 disable: false,
                 runWithNode: false
             }];
-            this.save(proxyItems);
+            this.save(this._proxyItems);
         }
-        return proxyItems;
     }
+
+
 }
 
 

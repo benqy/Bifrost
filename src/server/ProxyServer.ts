@@ -35,7 +35,7 @@ class ProxyServer {
             }, err => console.log('err'))
         }
         else {
-            console.log(urlOpt,urlOpt.port || 80)
+            //console.log(urlOpt,urlOpt.port || 80)
             this._proxy.web(req, res, {
                 target: {
                     host: urlOpt.hostname,
