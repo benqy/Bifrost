@@ -36,19 +36,15 @@ class WebServer {
     }
 
     private _proxyHandler(urlOpt, req, res, proxyItem: ProxyItem) {
-        console.log('_proxyHandler')
         let resData;
         let oriUrlOpt = url.parse(urlOpt.query.oriurl, true);
         let header = { 'content-type': util.getContentType(oriUrlOpt.pathname) };
-        console.log(1, proxyItem);
         if (!fs.existsSync(proxyItem.filepath)) {
             resData = this._404(proxyItem.filepath);
             res.writeHead(404, header);
         }
         //浏览器请求的url所属的host被整个代理到本地目录,因此该host下的路径都指向代理目录
         else if (util.isdir(proxyItem.filepath)) {
-            console.log('dir')
-            console.log(oriUrlOpt)
             let relativePath = decodeURIComponent(urlOpt.query.oriurl).toLowerCase().replace(proxyItem.url, '');
             let filepath = path.join(proxyItem.filepath, relativePath);
             let { statusCode, resData} = this._readResponseContent(filepath,oriUrlOpt);

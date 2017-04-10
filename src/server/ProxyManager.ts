@@ -26,8 +26,17 @@ interface ProxyItem {
 
 class ProxyManager {
 
-    constructor(readonly _settingPath: string) {
+    //单例
+    static _current: ProxyManager;
+
+    constructor(private _settingPath: string) {
         this._settingPath += '\\bifrost.json';
+        if (ProxyManager._current) {
+            return ProxyManager._current;
+        }
+        else{
+            ProxyManager._current = this;
+        }
     }
 
     private _settingExists() {
@@ -77,7 +86,7 @@ class ProxyManager {
         let jsonStr = JSON.stringify(proxyItems, (key, value) => {
             return value;
         }, 4);
-        fs.writeFileSync(this._settingPath,jsonStr);
+        fs.writeFileSync(this._settingPath, jsonStr);
     }
 
     getAll(): Array<ProxyItem> {

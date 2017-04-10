@@ -7,6 +7,7 @@ import * as httpProxy from 'http-proxy';
 import util from './util'
 import { ProxyManager } from './ProxyManager';
 
+
 class ProxyServer {
     private _proxyManager: ProxyManager;
     private _proxy;
@@ -15,6 +16,7 @@ class ProxyServer {
 
     constructor(readonly options) {
         this._proxyManager = new ProxyManager(this.options.rootPath);
+
         this._proxy = httpProxy.createProxyServer();
         this._server = http.createServer(this._webHandler.bind(this));
     }
