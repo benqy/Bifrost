@@ -69,7 +69,7 @@ class ProxyManager {
                     index = i;
                     return true;
                 }
-                //设置了整个目录代理(n.filepath),请求的文件在这个目录中,则该文件也被代理到对应的相对路径.
+                //代理项是文件夹(n.filepath),则该代理项所有子文件都被代理.
                 else if (util.isdir(n.filepath) && ~urlStrOpt.pathname.trim().indexOf(proxyUrlOpt.pathname.trim())) {
                     index = i;
                     return true;

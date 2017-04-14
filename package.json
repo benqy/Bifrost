@@ -33,7 +33,7 @@
     "commands": [
       {
         "command": "extension.bf.open_in_browser",
-        "title": "在浏览器打开"
+        "title": "open in browser"
       },
       {
         "command": "extension.bf.toggle_global_proxy",
