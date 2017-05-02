@@ -24,8 +24,12 @@
     "menus": {
       "explorer/context": [
         {
-          "when": "explorerViewletVisible",
           "command": "extension.bf.open_in_browser",
+          "group": "navigation@1"
+        },
+        {
+          "when": "explorerViewletVisible",
+          "command": "extension.bf.proxy_this_file",
           "group": "navigation@1"
         }
       ]
@@ -36,6 +40,10 @@
         "title": "open in browser"
       },
       {
+        "command": "extension.bf.proxy_this_file",
+        "title": "proxy this file"
+      },
+      {
         "command": "extension.bf.toggle_global_proxy",
         "title": "toggle global proxy setting"
       }
@@ -44,6 +52,10 @@
       {
         "command": "extension.bf.open_in_browser",
         "key": "shift+alt+o"
+      },
+      {
+        "command": "extension.bf.proxy_this_file",
+        "key": "shift+alt+p"
       }
     ],
     "configuration": {

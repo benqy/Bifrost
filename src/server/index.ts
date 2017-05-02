@@ -2,6 +2,7 @@ import { ProxyServer } from './ProxyServer';
 import { WebServer } from './WebServer';
 import * as path from 'path';
 import * as childProcess from 'child_process';
+import { ProxyManager, ProxyItem } from './ProxyManager';
 import { window, workspace, commands, Disposable, ExtensionContext, StatusBarAlignment, StatusBarItem, TextDocument } from 'vscode';
 const configs = workspace.getConfiguration('bifrost');
 
@@ -64,9 +65,20 @@ class Server {
     on(fn?: Function) {
         this._webServer = new WebServer({ port: this.webServerPort, rootPath: this.rootPath });
         this._webServer.on();
-        this._proxyServer = new ProxyServer({ port: this.proxyServerPort,webServerport: this.webServerPort, rootPath: this.rootPath })
+        this._proxyServer = new ProxyServer({ port: this.proxyServerPort, webServerport: this.webServerPort, rootPath: this.rootPath })
         this._proxyServer.on();
         fn && fn();
+    }
+
+    addProxyItem(fsPath: string) {
+        let pm = new ProxyManager(this.rootPath)
+        let proxyItem = {
+            "url": "http://www.proxyitems.com",
+            "filepath": fsPath,
+            "disable": false,
+            "runWithNode": false
+        }
+        pm.addProxyItem(proxyItem)
     }
 }
 

@@ -10,7 +10,7 @@ export function activate(context: ExtensionContext) {
     var server = new Server({ extensionPath: context.extensionPath });
     server.on(() => { console.log(`web server run on ${server.webServerPort}`) });
     //server.enableGlobalProxy();
-    
+
     commands.registerCommand('extension.bf.open_in_browser', events => {
         let fsPath;
         // window.showInputBox({prompt: 'What is your favorite fruit?'})
@@ -25,6 +25,19 @@ export function activate(context: ExtensionContext) {
         let url = 'http:' + ip + (server.webServerPort == 80 ? '' : ':' + server.webServerPort) + filepath;
         openInBrowser(url);
         console.log(`open:${url}`);
+    });
+
+    commands.registerCommand('extension.bf.proxy_this_file', events => {
+        let fsPath;
+        if (events && events.fsPath) {
+            fsPath = events.fsPath
+        }
+        else if (window.activeTextEditor) {
+            fsPath = window.activeTextEditor.document.fileName
+        }
+        server.addProxyItem(fsPath)
+        workspace.openTextDocument(workspace.rootPath + '\\bifrost.json')
+            .then(textDocument => window.showTextDocument(textDocument))
     });
 
     commands.registerCommand('extension.bf.toggle_global_proxy', events => {

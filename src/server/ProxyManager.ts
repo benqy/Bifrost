@@ -28,11 +28,12 @@ class ProxyManager {
 
     //单例
     static _current: ProxyManager;
+
+    private _proxyItems: Array<ProxyItem> = [];
     get proxyItems(): Array<ProxyItem> {
         return this._proxyItems;
     }
 
-    private _proxyItems: Array<ProxyItem> = [];
 
     constructor(private _settingPath: string) {
         this._settingPath += '\\bifrost.json';
@@ -89,11 +90,17 @@ class ProxyManager {
         return this.proxyItems.find(n => n.filepath === filepath);
     }
 
-    save(proxyItems) {
+    save(proxyItems:Array<ProxyItem>) {
+        console.log(proxyItems)
         let jsonStr = JSON.stringify(proxyItems, (key, value) => {
             return value;
         }, 4);
         fs.writeFileSync(this._settingPath, jsonStr);
+    }
+
+    addProxyItem(proxyItem:ProxyItem){
+        this.proxyItems.push(proxyItem);
+        this.save(this.proxyItems);
     }
 
     private _readProxyItemsFile() {
