@@ -6,7 +6,7 @@
   "version": "0.0.10",
   "publisher": "benqy",
   "engines": {
-    "vscode": "^1.10.0"
+    "vscode": "^1.11.0"
   },
   "categories": [
     "Debuggers"
