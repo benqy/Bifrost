@@ -3,10 +3,10 @@
   "displayName": "Bifrost",
   "description": "proxy,mock,local file web server",
   "icon": "imgs/logo.png",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "publisher": "benqy",
   "engines": {
-    "vscode": "^1.11.0"
+    "vscode": "^1.10.0"
   },
   "categories": [
     "Debuggers"
