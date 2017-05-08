@@ -29,6 +29,7 @@ class ProxyManager {
     //单例
     static _current: ProxyManager;
 
+    private _onWatching = false
     private _proxyItems: Array<ProxyItem> = [];
     get proxyItems(): Array<ProxyItem> {
         return this._proxyItems;
@@ -42,12 +43,19 @@ class ProxyManager {
         }
         else {
             console.log('static init Proxy Manager')
-            fs.watch(this._settingPath, (eventType, filename) => {
-                console.log('update bifrost.json');
-                this._readProxyItemsFile();
-            });
+            this._watchData();
             this._readProxyItemsFile();
             ProxyManager._current = this;
+        }
+    }
+
+    private _watchData() {
+        if(!this._onWatching && fs.existsSync(this._settingPath)){
+            this._onWatching = true
+            fs.watch(this._settingPath, (eventType, filename) => {
+                console.log('update bifrost.json')
+                this._readProxyItemsFile();
+            })
         }
     }
 
@@ -90,15 +98,16 @@ class ProxyManager {
         return this.proxyItems.find(n => n.filepath === filepath);
     }
 
-    save(proxyItems:Array<ProxyItem>) {
+    save(proxyItems: Array<ProxyItem>) {
         console.log(proxyItems)
         let jsonStr = JSON.stringify(proxyItems, (key, value) => {
             return value;
         }, 4);
         fs.writeFileSync(this._settingPath, jsonStr);
+        this._watchData();
     }
 
-    addProxyItem(proxyItem:ProxyItem){
+    addProxyItem(proxyItem: ProxyItem) {
         this.proxyItems.push(proxyItem);
         this.save(this.proxyItems);
     }

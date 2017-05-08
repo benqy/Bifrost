@@ -3,7 +3,7 @@
   "displayName": "Bifrost",
   "description": "proxy,mock,local file web server",
   "icon": "imgs/logo.png",
-  "version": "0.0.11",
+  "version": "0.0.14",
   "publisher": "benqy",
   "engines": {
     "vscode": "^1.10.0"
@@ -28,7 +28,6 @@
           "group": "navigation@1"
         },
         {
-          "when": "explorerViewletVisible",
           "command": "extension.bf.proxy_this_file",
           "group": "navigation@1"
         }
